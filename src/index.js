@@ -1,10 +1,18 @@
 const canvas = document.querySelector('canvas');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
 const c = canvas.getContext('2d');
 
 let particles = [];
-
+let colors = [
+    'green',
+    'red',
+    'blue',
+    'white',
+    'yellow'
+]
+function setCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
 function makeParticle(x, y, radius, color) {
     let velocity = 0.01;
     let radians = Math.random() * Math.PI * 2;
@@ -31,10 +39,10 @@ function makeParticle(x, y, radius, color) {
 }
 
 function animate() {
+    let lastSize = window.innerWidth;
     requestAnimationFrame(animate);
     c.fillStyle = 'rgba(0, 0, 0, 0.1)'
     c.fillRect(0,0, canvas.width, canvas.height);
-    
     particles.forEach(particle => {
         particle.update();
     })
@@ -52,16 +60,24 @@ async function init() {
     makeBoom('red', canvas.width / 4, canvas.height / 3, 3000);
     await new Promise(resolve => setTimeout(resolve, 500));    
     makeBoom('yellow', canvas.width / 1.5, canvas.height / 1.5, 3000);
-    await new Promise(resolve => setTimeout(resolve, 2500));    
-    makeBoom('red', canvas.width / 4, canvas.height / 3, 3000);
+    await new Promise(resolve => setTimeout(resolve, 2500));
+    makeBoom('purple', canvas.width / 4, canvas.height / 1.5, 3000);
+    await new Promise(resolve => setTimeout(resolve, 500));    
+    makeBoom('blue', canvas.width / 1.5, canvas.height / 3, 3000);
+    await new Promise(resolve => setTimeout(resolve, 2500));   
+    makeBoom('white', canvas.width / 4, canvas.height / 3, 3000);
     await new Promise(resolve => setTimeout(resolve, 500));  
-    makeBoom('yellow', canvas.width / 1.5, canvas.height / 1.5, 3000);
+    makeBoom('green', canvas.width / 1.5, canvas.height / 1.5, 3000);
     await new Promise(resolve => setTimeout(resolve, 2500));    
 
     init();
 }
 
+setCanvas();
 c.fillRect(0,0, canvas.width, canvas.height);
-
 init();
+
 animate();
+window.addEventListener('click', (e)=> {
+    makeBoom(colors[(Math.floor(Math.random() * 10) + 1) / 2 - 1], e.clientX, e.clientY, 3000);
+});
